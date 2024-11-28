@@ -1,0 +1,12 @@
+<container size="520,36" gravity="bottom-center" margin="0,0,0,70">
+    <image id="hp_0" src="gui/health_point" size="32"/>
+    <image id="hp_1" src="gui/health_point" size="32" pos="24,0"/>
+    <image id="hp_2" src="gui/health_point" size="32" pos="48,0"/>
+    <image id="hp_3" src="gui/health_point" size="32" pos="72,0"/>
+    <image id="hp_4" src="gui/health_point" size="32" pos="96,0"/>
+    <image id="hp_5" src="gui/health_point" size="32" pos="120,0"/>
+    <image id="hp_6" src="gui/health_point" size="32" pos="144,0"/>
+    <image id="hp_7" src="gui/health_point" size="32" pos="168,0"/>
+    <image id="hp_8" src="gui/health_point" size="32" pos="192,0"/>
+    <image id="hp_9" src="gui/health_point" size="32" pos="216,0"/>
+</container>
