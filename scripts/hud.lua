@@ -1,7 +1,7 @@
 local gamemodes = require "gamemodes"
 
 function on_hud_open()
-    hud.open_permanent("base_survival:health_bar")
+    -- hud.open_permanent("base_survival:health_bar")
 
     console.add_command("gamemode player:sel=$obj.id name:str=''", 
     "Set game mode",
