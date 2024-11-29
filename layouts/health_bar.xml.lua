@@ -13,6 +13,6 @@ function survival_hud.set_health(health)
 end
 
 function on_open()
-    local health = survival_hud.get_health_component(hud.get_player())
+    local health = survival_hud.get_player_health(hud.get_player())
     survival_hud.set_health(health.get_health())
 end
