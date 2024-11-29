@@ -28,6 +28,7 @@ function gamemodes.set(playerid, name)
         player.set_noclip(playerid, false)
     end
     gamemode.current = name
+    events.emit("base_survival:gamemodes.set", playerid, name)
 end
 
 function gamemodes.exists(name)
@@ -39,6 +40,8 @@ function gamemodes.get(playerid)
         gamemodes.players[playerid] = {
             current=player.is_infinite_items(playerid)
             and "developer" or "survival"}
+        events.emit("base_survival:gamemodes.set", playerid, 
+                    gamemodes.players[playerid].current)
     end
     return gamemodes.players[playerid]
 end

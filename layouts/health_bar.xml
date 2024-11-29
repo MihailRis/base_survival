@@ -1,4 +1,4 @@
-<container size="520,36" gravity="bottom-center" margin="0,0,0,70">
+<container size="520,36" gravity="bottom-center" margin="0,0,0,70" z-index="-2">
     <image id="hp_0" src="gui/health_point" size="32"/>
     <image id="hp_1" src="gui/health_point" size="32" pos="24,0"/>
     <image id="hp_2" src="gui/health_point" size="32" pos="48,0"/>
