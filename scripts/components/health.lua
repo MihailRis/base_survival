@@ -30,7 +30,7 @@ function die()
             local itemid, count = inventory.get(invid, i)
             if itemid ~= 0 then
                 base_util.drop(pos, itemid, count).rigidbody:set_vel(vec3.spherical_rand(5.0))
-                inventory.set(invid, 0, 0)
+                inventory.set(invid, i, 0)
             end
         end
     end
