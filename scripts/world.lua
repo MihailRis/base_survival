@@ -11,16 +11,6 @@ local function get_durability(id)
     if block.get_model(id) == "X" then
         return 0.0
     end
-    local material = block.material(id)
-    if material == "base:ground" or 
-       material == "base:grass_block" or 
-       material == "base:sand" then
-        return 0.7
-    elseif material == "base:glass" then
-        return 0.4
-    elseif material == "base:grass" then
-        return 1.0
-    end
     return 5.0
 end
 
