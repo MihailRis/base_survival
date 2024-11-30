@@ -2,6 +2,12 @@ local gamemodes = {
     players = {}
 }
 
+function gamemodes.get_player_health(playerid)
+    local entity = entities.get(player.get_entity(playerid))
+    return entity:get_component("base_survival:health")
+end
+
+
 function gamemodes.set(playerid, name)
     local gamemode = gamemodes.get(playerid)
     if name == "developer" then

@@ -73,8 +73,3 @@ function on_hud_open()
         gfx.blockwraps.unwrap(target.wrapper)
     end)
 end
-
-function on_hud_render()
-    local health = survival_hud.get_player_health(hud.get_player())
-    health.set_health(math.floor((time.uptime() % 1.0) * 20))
-end

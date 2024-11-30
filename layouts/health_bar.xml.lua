@@ -1,4 +1,5 @@
 local survival_hud = require "survival_hud"
+local gamemodes = require "gamemodes"
 
 function survival_hud.set_health(health)
     for i=1,10 do
@@ -13,6 +14,6 @@ function survival_hud.set_health(health)
 end
 
 function on_open()
-    local health = survival_hud.get_player_health(hud.get_player())
+    local health = gamemodes.get_player_health(hud.get_player())
     survival_hud.set_health(health.get_health())
 end
