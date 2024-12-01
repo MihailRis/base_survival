@@ -1,7 +1,23 @@
 local gamemodes = require "gamemodes"
+local survival_hud = require "survival_hud"
 
 function on_hud_open()
-    -- hud.open_permanent("base_survival:health_bar")
+    events.on("base_survival:gamemodes.set", function(playerid, name)
+        if name == "survival" then
+            hud.open_permanent("base_survival:health_bar")
+
+            local entity = entities.get(player.get_entity(playerid))
+            local health = entity:get_component("base_survival:health")
+            survival_hud.set_health(health.get_health())
+        else
+            hud.close("base_survival:health_bar")
+        end
+    end)
+    events.on("base_survival:health.set", function(entity, health)
+        if entity:get_uid() == player.get_entity(hud.get_player()) then
+            survival_hud.set_health(health)
+        end
+    end)
 
     console.add_command("gamemode player:sel=$obj.id name:str=''", 
     "Set game mode",

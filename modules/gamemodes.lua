@@ -2,6 +2,12 @@ local gamemodes = {
     players = {}
 }
 
+function gamemodes.get_player_health(playerid)
+    local entity = entities.get(player.get_entity(playerid))
+    return entity:get_component("base_survival:health")
+end
+
+
 function gamemodes.set(playerid, name)
     local gamemode = gamemodes.get(playerid)
     if name == "developer" then
@@ -28,6 +34,7 @@ function gamemodes.set(playerid, name)
         player.set_noclip(playerid, false)
     end
     gamemode.current = name
+    events.emit("base_survival:gamemodes.set", playerid, name)
 end
 
 function gamemodes.exists(name)
@@ -39,6 +46,8 @@ function gamemodes.get(playerid)
         gamemodes.players[playerid] = {
             current=player.is_infinite_items(playerid)
             and "developer" or "survival"}
+        events.emit("base_survival:gamemodes.set", playerid, 
+                    gamemodes.players[playerid].current)
     end
     return gamemodes.players[playerid]
 end
