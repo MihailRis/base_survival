@@ -8,9 +8,16 @@ health = math.ceil(health)
 
 local fall_timer = 0.0
 
-immortal = false
-spawnpoint = nil
-invid = nil
+local immortal
+local spawnpoint
+local invid
+
+function set_player(pid)
+    local gamemode = gamemodes.get(pid).current
+    immortal = gamemode ~= "survival"
+    spawnpoint = {player.get_spawnpoint(pid)}
+    invid = player.get_inventory(pid) 
+end
 
 function get_health()
     return health or 15

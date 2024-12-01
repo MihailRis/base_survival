@@ -26,9 +26,7 @@ end
 function on_player_tick(pid, tps)
     local gamemode = gamemodes.get(pid).current
     local phealth = gamemodes.get_player_health(pid)
-    phealth.immortal = gamemode ~= "survival"
-    phealth.spawnpoint = {player.get_spawnpoint(pid)}
-    phealth.invid = player.get_inventory(pid)
+    phealth.set_player(pid)
 
     if gamemode ~= "survival" then
         return
