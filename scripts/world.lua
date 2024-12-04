@@ -68,6 +68,9 @@ function on_player_tick(pid, tps)
 end
 
 function on_block_broken(id, x, y, z, pid)
+    if pid == -1 then
+        return
+    end
     if gamemodes.get(pid).current ~= "survival" then
         return
     end
