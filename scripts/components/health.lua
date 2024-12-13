@@ -6,8 +6,6 @@ local max_health = SAVED_DATA.max_health or ARGS.max_health or 20
 
 health = math.ceil(health)
 
-local fall_timer = 0.0
-
 local immortal
 local spawnpoint
 local invid
@@ -63,14 +61,6 @@ function on_save()
 end
 
 function on_grounded(force)
-    local dmg = 5 * fall_timer * fall_timer - 3
+    local dmg = math.floor((force - 12) * 0.5)
     damage(math.max(0, math.floor(dmg)))
-end
-
-function on_update(tps)
-    fall_timer = fall_timer + 1.0 / tps
-end
-
-function on_fall()
-    fall_timer = 0.0
 end
