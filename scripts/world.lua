@@ -14,10 +14,6 @@ local function get_durability(id)
     return 5.0
 end
 
-local function get_drop(id, pid)
-    return block.get_picking_item(id), 1
-end
-
 local function stop_breaking(target)
     events.emit("base_survival:stop_destroy", pid, target)
     target.breaking = false
@@ -74,6 +70,8 @@ function on_block_broken(id, x, y, z, pid)
     if gamemodes.get(pid).current ~= "survival" then
         return
     end
-    local dropid, count = get_drop(id, pid)
-    base_util.drop({x + 0.5, y + 0.5, z + 0.5}, dropid, count)
+    local loot_table = base_util.block_loot(id)
+    for _, loot in ipairs(loot_table) do
+        base_util.drop({x + 0.5, y + 0.5, z + 0.5}, loot.item, loot.count)
+    end
 end
