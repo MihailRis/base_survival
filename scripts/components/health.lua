@@ -6,19 +6,8 @@ local max_health = SAVED_DATA.max_health or ARGS.max_health or 20
 
 health = math.ceil(health)
 
-local immortal
-local spawnpoint
-local invid
-
-function set_player(pid)
-    local gamemode = gamemodes.get(pid).current
-    immortal = gamemode ~= "survival"
-    spawnpoint = {player.get_spawnpoint(pid)}
-    invid = player.get_inventory(pid) 
-end
-
 function get_health()
-    return health or 15
+    return health or 20
 end
 
 function set_health(value)
@@ -26,29 +15,38 @@ function set_health(value)
     events.emit("base_survival:health.set", entity, health)
 end
 
-function die()
-    set_health(max_health)
-    if invid then
-        local pos = entity.transform:get_pos()
-        local size = inventory.size(invid)
-        for i=0,size-1 do
-            local itemid, count = inventory.get(invid, i)
-            if itemid ~= 0 then
-                base_util.drop(pos, itemid, count).rigidbody:set_vel(vec3.spherical_rand(5.0))
-                inventory.set(invid, i, 0)
-            end
+local function drop_inventory(invid)
+    local pos = entity.transform:get_pos()
+    local size = inventory.size(invid)
+    for i=0,size-1 do
+        local itemid, count = inventory.get(invid, i)
+        if itemid ~= 0 then
+            base_util.drop(pos, itemid, count).rigidbody:set_vel(vec3.spherical_rand(5.0))
+            inventory.set(invid, i, 0)
         end
     end
-    if spawnpoint then
-        entity.transform:set_pos(spawnpoint)
-    end
+end
+
+function die()
     events.emit("base_survival:death", entity)
+
+    local pid = entity:get_player()
+    if pid == hud.get_player() then
+        if not rules.get("keep-inventory") then
+            drop_inventory(player.get_inventory(pid))
+        end
+        hud.close_inventory()
+        entity:despawn()
+        player.set_entity(pid, -1)
+        gui.alert("You are dead", function ()
+            player.set_pos(pid, player.get_spawnpoint(pid))
+            player.set_entity(pid, 0)
+            menu:reset()
+        end)
+    end
 end
 
 function damage(points)
-    if immortal then
-        return
-    end
     set_health(health - points)
     if health == 0 then
         die()

@@ -19,11 +19,18 @@ local function stop_breaking(target)
     target.breaking = false
 end
 
+function on_world_open()
+    events.on("base_survival:gamemodes.set", function(pid, name)
+        local entity = entities.get(player.get_entity(pid))
+        if entity then
+            entity:set_enabled("base_survival:health", name == "survival")
+        end
+    end)
+    rules.create("keep-inventory", false)
+end
+
 function on_player_tick(pid, tps)
     local gamemode = gamemodes.get(pid).current
-    local phealth = gamemodes.get_player_health(pid)
-    phealth.set_player(pid)
-
     if gamemode ~= "survival" then
         return
     end
