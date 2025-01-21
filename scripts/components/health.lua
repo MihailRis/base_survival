@@ -37,10 +37,10 @@ function die()
         end
         hud.close_inventory()
         entity:despawn()
-        player.set_entity(pid, -1)
+        player.set_entity(pid, 0)
         gui.alert("You are dead", function ()
             player.set_pos(pid, player.get_spawnpoint(pid))
-            player.set_entity(pid, 0)
+            player.set_entity(pid, -1)
             menu:reset()
         end)
     end
