@@ -40,6 +40,7 @@ function die()
         player.set_entity(pid, 0)
         gui.alert("You are dead", function ()
             player.set_pos(pid, player.get_spawnpoint(pid))
+            player.set_rot(pid, 0, 0, 0)
             player.set_entity(pid, -1)
             menu:reset()
         end)
@@ -59,6 +60,6 @@ function on_save()
 end
 
 function on_grounded(force)
-    local dmg = math.floor((force - 12) * 0.5)
+    local dmg = math.floor((force - 12) * 0.75)
     damage(math.max(0, math.floor(dmg)))
 end

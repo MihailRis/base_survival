@@ -48,7 +48,7 @@ function on_hud_open()
         gfx.blockwraps.set_texture(target.wrapper, string.format(
             "cracks/cracks_%s", math.floor(target.progress * 11)
         ))
-        if target.tick % 12 == 0 then
+        if target.tick % 4 == 0 then
             audio.play_sound(block.materials[block.material(target.id)].stepsSound, 
                 x + 0.5, y + 0.5, z + 0.5, 1.0, 1.0, "regular"
             )
