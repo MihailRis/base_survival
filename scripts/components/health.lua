@@ -21,7 +21,8 @@ local function drop_inventory(invid)
     for i=0,size-1 do
         local itemid, count = inventory.get(invid, i)
         if itemid ~= 0 then
-            base_util.drop(pos, itemid, count).rigidbody:set_vel(vec3.spherical_rand(5.0))
+            local drop = base_util.drop(pos, itemid, count)
+            drop.rigidbody:set_vel(vec3.spherical_rand(8.0))
             inventory.set(invid, i, 0)
         end
     end

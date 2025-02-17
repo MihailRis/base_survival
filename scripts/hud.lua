@@ -28,26 +28,26 @@ function on_hud_open()
     console.add_command("gamemode player:sel=$obj.id name:str=''", 
     "Set game mode",
     function (args, kwargs)
-        local playerid = args[1] or hud.get_player()
+        local pid = args[1] or hud.get_player()
         local name = args[2]
         if #name == 0 then
-            return "current game mode is ["..gamemodes.get(playerid).current.."]"
+            return "current game mode is ["..gamemodes.get(pid).current.."]"
         end
         if gamemodes.exists(name) then
-            gamemodes.set(playerid, name)
+            gamemodes.set(pid, name)
             return "set game mode to ["..name.."]"
         else
             return "error: game mode ["..name.."] does not exists"
         end
     end)
 
-    events.on("base_survival:start_destroy", function(playerid, target)
+    events.on("base_survival:start_destroy", function(pid, target)
         target.wrapper = gfx.blockwraps.wrap(
             {target.x, target.y, target.z}, "cracks/cracks_0"
         )
     end)
 
-    events.on("base_survival:progress_destroy", function(playerid, target)
+    events.on("base_survival:progress_destroy", function(pid, target)
         local x = target.x
         local y = target.y
         local z = target.z
@@ -75,12 +75,20 @@ function on_hud_open()
         end
     end)
 
-    events.on("base_survival:stop_destroy", function(playerid, target)
+    events.on("base_survival:stop_destroy", function(pid, target)
         gfx.blockwraps.unwrap(target.wrapper)
     end)
 
     events.on("base_survival:player_death", function(pid, just_happened)
         if pid ~= hud.get_player() then
+            if just_happened then
+                audio.play_sound_2d(
+                    "events/huge_damage", 
+                    1.0, 
+                    0.8 + math.random() * 0.4, 
+                    "regular"
+                )
+            end
             return
         end
         isdead = true
@@ -89,7 +97,6 @@ function on_hud_open()
         if just_happened then
             local px, py, pz = player.get_pos(pid)
             player.set_pos(pid, px, py - 0.7, pz)
-            audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
         end
         gui.alert("You are dead", function ()
             player.set_pos(pid, player.get_spawnpoint(pid))
