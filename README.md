@@ -7,3 +7,6 @@ Currently implemented:
   - gamemodes
 - game mode switching command
 - slow blocks destruction
+- health:
+  - fall damage
+  - death
