@@ -73,3 +73,8 @@ function on_hud_open()
         gfx.blockwraps.unwrap(target.wrapper)
     end)
 end
+
+function on_hud_render()
+    local x, y, z = player.get_rot(pid)
+    player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12))
+end

@@ -32,6 +32,7 @@ function die()
 
     local pid = entity:get_player()
     if pid == hud.get_player() then
+        audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
         if not rules.get("keep-inventory") then
             drop_inventory(player.get_inventory(pid))
         end
@@ -44,10 +45,17 @@ function die()
             player.set_entity(pid, -1)
             menu:reset()
         end)
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, 45)
     end
 end
 
 function damage(points)
+    if points > 0 and entity:get_player() == hud.get_player() then
+        audio.play_sound_2d("events/damage", 0.5, 1.0 + math.random() * 0.4, "regular")
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
+    end
     set_health(health - points)
     if health == 0 then
         die()
