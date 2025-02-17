@@ -30,6 +30,9 @@ function on_world_open()
 end
 
 function on_player_tick(pid, tps)
+    if player.get_entity(pid) == 0 then
+        return -- dead
+    end
     local gamemode = gamemodes.get(pid).current
     if gamemode ~= "survival" then
         return
@@ -47,7 +50,7 @@ function on_player_tick(pid, tps)
                x ~= target.x or y ~= target.y or z ~= target.z then
                 return stop_breaking(target)
             end
-            local speed = 1.0 / math.max(get_durability(target.id), 0.00001)
+            local speed = 1.0 / math.max(get_durability(target.id), 1e-5)
             target.progress = target.progress + (1.0/tps) * speed
             target.tick = target.tick + 1
             if target.progress >= 1.0 then

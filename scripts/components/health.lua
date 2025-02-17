@@ -21,7 +21,8 @@ local function drop_inventory(invid)
     for i=0,size-1 do
         local itemid, count = inventory.get(invid, i)
         if itemid ~= 0 then
-            base_util.drop(pos, itemid, count).rigidbody:set_vel(vec3.spherical_rand(5.0))
+            local drop = base_util.drop(pos, itemid, count)
+            drop.rigidbody:set_vel(vec3.spherical_rand(8.0))
             inventory.set(invid, i, 0)
         end
     end
@@ -29,25 +30,22 @@ end
 
 function die()
     events.emit("base_survival:death", entity)
+    events.emit("base_survival:player_death", entity:get_player(), true)
 
     local pid = entity:get_player()
-    if pid == hud.get_player() then
-        if not rules.get("keep-inventory") then
-            drop_inventory(player.get_inventory(pid))
-        end
-        hud.close_inventory()
-        entity:despawn()
-        player.set_entity(pid, 0)
-        gui.alert("You are dead", function ()
-            player.set_pos(pid, player.get_spawnpoint(pid))
-            player.set_rot(pid, 0, 0, 0)
-            player.set_entity(pid, -1)
-            menu:reset()
-        end)
+    if not rules.get("keep-inventory") then
+        drop_inventory(player.get_inventory(pid))
     end
+    entity:despawn()
+    player.set_entity(pid, 0)
 end
 
 function damage(points)
+    if points > 0 and entity:get_player() == hud.get_player() then
+        audio.play_sound_2d("events/damage", 0.5, 1.0 + math.random() * 0.4, "regular")
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
+    end
     set_health(health - points)
     if health == 0 then
         die()

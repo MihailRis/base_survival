@@ -1,12 +1,18 @@
 local gamemodes = require "gamemodes"
 local survival_hud = require "survival_hud"
 
+local death_ambient
+local isdead = false
+
 function on_hud_open()
     events.on("base_survival:gamemodes.set", function(playerid, name)
         if name == "survival" then
             hud.open_permanent("base_survival:health_bar")
 
             local entity = entities.get(player.get_entity(playerid))
+            if not entity then
+                return -- dead
+            end
             local health = entity:get_component("base_survival:health")
             survival_hud.set_health(health.get_health())
         else
@@ -22,26 +28,26 @@ function on_hud_open()
     console.add_command("gamemode player:sel=$obj.id name:str=''", 
     "Set game mode",
     function (args, kwargs)
-        local playerid = args[1] or hud.get_player()
+        local pid = args[1] or hud.get_player()
         local name = args[2]
         if #name == 0 then
-            return "current game mode is ["..gamemodes.get(playerid).current.."]"
+            return "current game mode is ["..gamemodes.get(pid).current.."]"
         end
         if gamemodes.exists(name) then
-            gamemodes.set(playerid, name)
+            gamemodes.set(pid, name)
             return "set game mode to ["..name.."]"
         else
             return "error: game mode ["..name.."] does not exists"
         end
     end)
 
-    events.on("base_survival:start_destroy", function(playerid, target)
+    events.on("base_survival:start_destroy", function(pid, target)
         target.wrapper = gfx.blockwraps.wrap(
             {target.x, target.y, target.z}, "cracks/cracks_0"
         )
     end)
 
-    events.on("base_survival:progress_destroy", function(playerid, target)
+    events.on("base_survival:progress_destroy", function(pid, target)
         local x = target.x
         local y = target.y
         local z = target.z
@@ -69,7 +75,58 @@ function on_hud_open()
         end
     end)
 
-    events.on("base_survival:stop_destroy", function(playerid, target)
+    events.on("base_survival:stop_destroy", function(pid, target)
         gfx.blockwraps.unwrap(target.wrapper)
     end)
+
+    events.on("base_survival:player_death", function(pid, just_happened)
+        if just_happened then
+            local pos = cameras.get(player.get_camera(pid)):get_pos()
+            audio.play_sound(
+                "events/huge_damage",
+                pos[1], pos[2], pos[3],
+                1.0, 
+                0.8 + math.random() * 0.4, 
+                "regular"
+            )
+        end
+        if pid ~= hud.get_player() then
+            return
+        end
+        isdead = true
+        
+        hud.close_inventory()
+        if just_happened then
+            local px, py, pz = player.get_pos(pid)
+            player.set_pos(pid, px, py - 0.7, pz)
+        end
+        gui.alert("You are dead", function ()
+            player.set_pos(pid, player.get_spawnpoint(pid))
+            player.set_rot(pid, 0, 0, 0)
+            player.set_entity(pid, -1)
+            menu:reset()
+
+            audio.stop(death_ambient)
+            death_ambient = nil
+            isdead = false
+        end)
+        death_ambient = audio.play_stream_2d(
+            "sounds/ambient/death.ogg", 1.0, 0.5, "ambient", true
+        )
+    end)
+end
+
+function on_hud_render()
+    local pid = hud.get_player()
+    if gamemodes.is_dead(pid) then
+        if not isdead then
+            events.emit("base_survival:player_death", pid)
+        end
+        local rx, ry, rz = player.get_rot(pid)
+        local t = time.delta() * 75
+        player.set_rot(pid, rx, ry, rz * (1.0 - t) + 45 * t)
+    else
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12)) 
+    end
 end

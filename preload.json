@@ -3,5 +3,9 @@
         "gui/health_point",
         "gui/health_point_off",
         "gui/health_point_half"
+    ],
+    "sounds": [
+        "events/damage",
+        "events/huge_damage"
     ]
 }
