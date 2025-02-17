@@ -80,15 +80,17 @@ function on_hud_open()
     end)
 
     events.on("base_survival:player_death", function(pid, just_happened)
+        if just_happened then
+            local pos = cameras.get(player.get_camera(pid)):get_pos()
+            audio.play_sound(
+                "events/huge_damage",
+                pos[1], pos[2], pos[3],
+                1.0, 
+                0.8 + math.random() * 0.4, 
+                "regular"
+            )
+        end
         if pid ~= hud.get_player() then
-            if just_happened then
-                audio.play_sound_2d(
-                    "events/huge_damage", 
-                    1.0, 
-                    0.8 + math.random() * 0.4, 
-                    "regular"
-                )
-            end
             return
         end
         isdead = true
