@@ -79,14 +79,18 @@ function on_hud_open()
         gfx.blockwraps.unwrap(target.wrapper)
     end)
 
-    events.on("base_survival:player_death", function(pid)
+    events.on("base_survival:player_death", function(pid, just_happened)
         if pid ~= hud.get_player() then
             return
         end
         isdead = true
         
         hud.close_inventory()
-        audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
+        if just_happened then
+            local px, py, pz = player.get_pos(pid)
+            player.set_pos(pid, px, py - 0.7, pz)
+            audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
+        end
         gui.alert("You are dead", function ()
             player.set_pos(pid, player.get_spawnpoint(pid))
             player.set_rot(pid, 0, 0, 0)
@@ -97,9 +101,6 @@ function on_hud_open()
             death_ambient = nil
             isdead = false
         end)
-        local x, y, z = player.get_rot(pid)
-        player.set_rot(pid, x, y, 45)
-
         death_ambient = audio.play_stream_2d(
             "sounds/ambient/death.ogg", 1.0, 0.5, "ambient", true
         )
@@ -112,6 +113,9 @@ function on_hud_render()
         if not isdead then
             events.emit("base_survival:player_death", pid)
         end
+        local rx, ry, rz = player.get_rot(pid)
+        local t = time.delta() * 75
+        player.set_rot(pid, rx, ry, rz * (1.0 - t) + 45 * t)
     else
         local x, y, z = player.get_rot(pid)
         player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12)) 

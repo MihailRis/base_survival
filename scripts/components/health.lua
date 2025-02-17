@@ -29,7 +29,7 @@ end
 
 function die()
     events.emit("base_survival:death", entity)
-    events.emit("base_survival:player_death", entity:get_player())
+    events.emit("base_survival:player_death", entity:get_player(), true)
 
     local pid = entity:get_player()
     if not rules.get("keep-inventory") then
