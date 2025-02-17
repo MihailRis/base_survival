@@ -30,6 +30,9 @@ function on_world_open()
 end
 
 function on_player_tick(pid, tps)
+    if player.get_entity(pid) == 0 then
+        return -- dead
+    end
     local gamemode = gamemodes.get(pid).current
     if gamemode ~= "survival" then
         return

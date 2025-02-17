@@ -29,25 +29,14 @@ end
 
 function die()
     events.emit("base_survival:death", entity)
+    events.emit("base_survival:player_death", entity:get_player())
 
     local pid = entity:get_player()
-    if pid == hud.get_player() then
-        audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
-        if not rules.get("keep-inventory") then
-            drop_inventory(player.get_inventory(pid))
-        end
-        hud.close_inventory()
-        entity:despawn()
-        player.set_entity(pid, 0)
-        gui.alert("You are dead", function ()
-            player.set_pos(pid, player.get_spawnpoint(pid))
-            player.set_rot(pid, 0, 0, 0)
-            player.set_entity(pid, -1)
-            menu:reset()
-        end)
-        local x, y, z = player.get_rot(pid)
-        player.set_rot(pid, x, y, 45)
+    if not rules.get("keep-inventory") then
+        drop_inventory(player.get_inventory(pid))
     end
+    entity:despawn()
+    player.set_entity(pid, 0)
 end
 
 function damage(points)

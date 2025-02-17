@@ -7,6 +7,10 @@ function gamemodes.get_player_health(playerid)
     return entity:get_component("base_survival:health")
 end
 
+function gamemodes.is_dead(playerid)
+    return player.get_entity(playerid) == 0
+end
+
 
 function gamemodes.set(playerid, name)
     local gamemode = gamemodes.get(playerid)

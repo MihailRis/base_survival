@@ -1,12 +1,18 @@
 local gamemodes = require "gamemodes"
 local survival_hud = require "survival_hud"
 
+local death_ambient
+local isdead = false
+
 function on_hud_open()
     events.on("base_survival:gamemodes.set", function(playerid, name)
         if name == "survival" then
             hud.open_permanent("base_survival:health_bar")
 
             local entity = entities.get(player.get_entity(playerid))
+            if not entity then
+                return -- dead
+            end
             local health = entity:get_component("base_survival:health")
             survival_hud.set_health(health.get_health())
         else
@@ -72,9 +78,42 @@ function on_hud_open()
     events.on("base_survival:stop_destroy", function(playerid, target)
         gfx.blockwraps.unwrap(target.wrapper)
     end)
+
+    events.on("base_survival:player_death", function(pid)
+        if pid ~= hud.get_player() then
+            return
+        end
+        isdead = true
+        
+        hud.close_inventory()
+        audio.play_sound_2d("events/huge_damage", 1.0, 0.8 + math.random() * 0.4, "regular")
+        gui.alert("You are dead", function ()
+            player.set_pos(pid, player.get_spawnpoint(pid))
+            player.set_rot(pid, 0, 0, 0)
+            player.set_entity(pid, -1)
+            menu:reset()
+
+            audio.stop(death_ambient)
+            death_ambient = nil
+            isdead = false
+        end)
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, 45)
+
+        death_ambient = audio.play_stream_2d(
+            "sounds/ambient/death.ogg", 1.0, 0.5, "ambient", true
+        )
+    end)
 end
 
 function on_hud_render()
-    local x, y, z = player.get_rot(pid)
-    player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12))
+    local pid = hud.get_player()
+    if gamemodes.is_dead(pid) then
+        if not isdead then
+            events.emit("base_survival:player_death", pid)
+        end
+    else
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12)) 
+    end
 end
