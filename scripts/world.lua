@@ -51,17 +51,20 @@ function on_player_tick(pid, tps)
                 return stop_breaking(target)
             end
             local speed = 1.0 / math.max(get_durability(target.id), 1e-5)
+            local power = 1.0
             local invid, slot = player.get_inventory(pid)
             local itemid, _ = inventory.get(invid, slot)
             local tool = item.properties[itemid]["base_survival:tool"]
             if tool and tool.type == "breaker" then
                 local material = tool.materials[block.material(target.id)]
                 if material then
-                    speed = speed * material.speed
+                    power = power * material.speed
                 end
             end
+            speed = speed * power
 
             target.progress = target.progress + (1.0/tps) * speed
+            target.power = power
             target.tick = target.tick + 1
             if target.progress >= 1.0 then
                 block.destruct(x, y, z, pid)

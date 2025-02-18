@@ -55,8 +55,9 @@ function on_hud_open()
             "cracks/cracks_%s", math.floor(target.progress * 11)
         ))
         if target.tick % 4 == 0 then
-            audio.play_sound(block.materials[block.material(target.id)].stepsSound, 
-                x + 0.5, y + 0.5, z + 0.5, 1.0, 1.0, "regular"
+            local material = block.materials[block.material(target.id)]
+            audio.play_sound(target.power >= 2.0 and material.hitSound or material.stepsSound, 
+                x + 0.5, y + 0.5, z + 0.5, 1.0, 0.9 + math.random() * 0.2, "regular"
             )
             local camera = cameras.get("core:first-person")
             local ray = block.raycast(camera:get_pos(), camera:get_front(), 64.0)
