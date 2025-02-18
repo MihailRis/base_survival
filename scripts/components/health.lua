@@ -21,7 +21,8 @@ local function drop_inventory(invid)
     for i=0,size-1 do
         local itemid, count = inventory.get(invid, i)
         if itemid ~= 0 then
-            local drop = base_util.drop(pos, itemid, count)
+            local data = inventory.get_all_data(invid, i)
+            local drop = base_util.drop(pos, itemid, count, data)
             drop.rigidbody:set_vel(vec3.spherical_rand(8.0))
             inventory.set(invid, i, 0)
         end
@@ -41,10 +42,9 @@ function die()
 end
 
 function damage(points)
-    if points > 0 and entity:get_player() == hud.get_player() then
-        audio.play_sound_2d("events/damage", 0.5, 1.0 + math.random() * 0.4, "regular")
-        local x, y, z = player.get_rot(pid)
-        player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
+    local pid = entity:get_player()
+    if points > 0 and pid then
+        events.emit("base_survival:player_damage", pid, points)
     end
     set_health(health - points)
     if health == 0 then
