@@ -56,16 +56,21 @@ function on_hud_open()
         ))
         if target.tick % 4 == 0 then
             local material = block.materials[block.material(target.id)]
-            audio.play_sound(target.power >= 2.0 and material.hitSound or material.stepsSound, 
-                x + 0.5, y + 0.5, z + 0.5, 1.0, 0.9 + math.random() * 0.2, "regular"
+            audio.play_sound(
+                target.power >= 1.2 and
+                    material.hitSound or
+                    material.stepsSound, 
+                x + 0.5, y + 0.5, z + 0.5,
+                1.0, 0.9 + math.random() * 0.2, "regular"
             )
-            local camera = cameras.get("core:first-person")
-            local ray = block.raycast(camera:get_pos(), camera:get_front(), 64.0)
+            local cam = cameras.get("core:first-person")
+            local front = cam:get_front()
+            local ray = block.raycast(cam:get_pos(), front, 64.0)
             gfx.particles.emit(ray.endpoint, 4, {
                 lifetime=1.0,
                 spawn_interval=0.0001,
                 explosion={3, 3, 3},
-                velocity=vec3.add(vec3.mul(camera:get_front(), -1.0), {0,0.5,0}),
+                velocity=vec3.add(vec3.mul(front, -1.0), {0, 0.5, 0}),
                 texture="blocks:"..block.get_textures(target.id)[1],
                 random_sub_uv=0.1,
                 size={0.1, 0.1, 0.1},
@@ -119,7 +124,9 @@ function on_hud_open()
         if pid ~= hud.get_player() then
             return
         end
-        audio.play_sound_2d("events/damage", 0.5, 1.0 + math.random() * 0.4, "regular")
+        audio.play_sound_2d(
+            "events/damage", 0.5, 1.0 + math.random() * 0.4, "regular"
+        )
         local x, y, z = player.get_rot(pid)
         player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
     end)
