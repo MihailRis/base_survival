@@ -114,6 +114,14 @@ function on_hud_open()
             "sounds/ambient/death.ogg", 1.0, 0.5, "ambient", true
         )
     end)
+    events.on("base_survival:player_damage", function(pid, points)
+        if pid ~= hud.get_player() then
+            return
+        end
+        audio.play_sound_2d("events/damage", 0.5, 1.0 + math.random() * 0.4, "regular")
+        local x, y, z = player.get_rot(pid)
+        player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
+    end)
 end
 
 function on_hud_render()
@@ -127,6 +135,7 @@ function on_hud_render()
         player.set_rot(pid, rx, ry, rz * (1.0 - t) + 45 * t)
     else
         local x, y, z = player.get_rot(pid)
-        player.set_rot(pid, x, y, z * (1.0 - time.delta() * 12)) 
+        local dt = math.min(time.delta() * 12, 1.0)
+        player.set_rot(pid, x, y, z * (1.0 - dt)) 
     end
 end
