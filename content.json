@@ -2,6 +2,15 @@
   "entities": [
     "base:player"
   ],
-  "items": [],
-  "blocks": []
+  "items": [
+    "primitive_pickaxe",
+    "coal",
+    "stick",
+    "rock"
+  ],
+  "blocks": [
+    "base:coal_ore",
+    "base:stone",
+    "mushroom"
+  ]
 }

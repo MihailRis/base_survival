@@ -1,0 +1,5 @@
+{
+    "steps-sound": "steps/grass",
+    "place-sound": "blocks/plant_place",
+    "break-sound": "blocks/plant_break"
+}

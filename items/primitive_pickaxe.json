@@ -1,0 +1,21 @@
+{
+    "icon": "items:primitive_pickaxe",
+    "uses": 24,
+    "base_survival:tool": {
+        "type": "breaker",
+        "materials": {
+            "base:stone": {
+                "speed": 15.0
+            },
+            "base:wood": {
+                "speed": 2.0
+            },
+            "base:ground": {
+                "speed": 1.5
+            },
+            "base:grass_block": {
+                "speed": 1.2
+            }
+        }
+    }
+}

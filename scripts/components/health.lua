@@ -58,6 +58,6 @@ function on_save()
 end
 
 function on_grounded(force)
-    local dmg = math.floor((force - 12) * 0.75)
+    local dmg = math.floor((force - 12) * 1.1)
     damage(math.max(0, math.floor(dmg)))
 end
