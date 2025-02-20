@@ -10,6 +10,10 @@ function get_health()
     return health or 20
 end
 
+function get_max_health()
+    return max_health
+end
+
 function set_health(value)
     health = math.min(math.max(0, value), max_health)
     events.emit("base_survival:health.set", entity, health)
@@ -39,6 +43,14 @@ function die()
     end
     entity:despawn()
     player.set_entity(pid, 0)
+end
+
+function heal(points)
+    local pid = entity:get_player()
+    if points < 1 and pid then
+        events.emit("base_survival:player_heal", pid, points)
+    end
+    set_health(math.min(health + points, max_health))
 end
 
 function damage(points)

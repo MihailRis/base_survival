@@ -130,6 +130,30 @@ function on_hud_open()
         local x, y, z = player.get_rot(pid)
         player.set_rot(pid, x, y, math.random() < 0.5 and 13 or -13)
     end)
+
+    input.add_callback("base_survival.eat", function()
+        if menu.page ~= "" or hud.is_inventory_open() then
+            return
+        end
+        local pid = hud.get_player()
+        local invid, slot = player.get_inventory()
+        local itemid, _ = inventory.get(invid, slot)
+        local food = item.properties[itemid]["base_survival:food"]
+        if not food then
+            return
+        end
+        local health = gamemodes.get_player_health(pid)
+        if health.get_health() >= health.get_max_health() then
+            return
+        end
+        health.heal(food.heal)
+        audio.play_sound_2d(
+            "events/eat", 0.5, 0.8 + math.random() * 0.4, "regular"
+        )
+        if not player.is_infinite_items(pid) then
+            inventory.decrement(invid, slot)
+        end
+    end)
 end
 
 function on_hud_render()

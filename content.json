@@ -1,16 +1,17 @@
 {
-  "entities": [
-    "base:player"
+  "blocks": [
+    "base:coal_ore",
+    "base:stone",
+    "mushroom"
   ],
   "items": [
     "primitive_pickaxe",
     "coal",
     "stick",
-    "rock"
+    "rock",
+    "mushroom.item"
   ],
-  "blocks": [
-    "base:coal_ore",
-    "base:stone",
-    "mushroom"
+  "entities": [
+    "base:player"
   ]
 }

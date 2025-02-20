@@ -6,6 +6,7 @@
     ],
     "sounds": [
         "events/damage",
-        "events/huge_damage"
+        "events/huge_damage",
+        "events/eat"
     ]
 }
