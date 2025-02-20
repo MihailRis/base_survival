@@ -1,0 +1,4 @@
+[forest]
+"plants@append" = [
+    {weight=0.01, block="base_survival:mushroom"}
+]
