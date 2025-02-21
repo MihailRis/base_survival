@@ -1,0 +1,14 @@
+{
+    "texture": "small_rock",
+    "model": "aabb",
+    "hitbox": [0.55,0.0,0.5,0.2,0.15,0.3],
+    "rotation": "pane",
+    "light-passing": true,
+    "sky-light-passing": true,
+    "material": "base_survival:small_stone",
+    "grounded": true,
+    "base:durability": 0.1,
+    "base:loot": [
+        {"item": "base_survival:rock", "count": 1}
+    ]
+}
