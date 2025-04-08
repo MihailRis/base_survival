@@ -1,0 +1,5 @@
+{
+    "base:loot": [
+        {"item": "base_survival:stick", "count": 4}
+    ]
+}

@@ -13,6 +13,8 @@
     "base:coal_ore",
     "base:stone",
     "mushroom",
-    "small_rock"
+    "small_rock",
+    "base:wood",
+    "base:leaves"
   ]
 }
