@@ -1,6 +1,12 @@
 {
-  "entities": [
-    "base:player"
+  "blocks": [
+    "base:coal_ore",
+    "base:stone",
+    "mushroom",
+    "small_rock",
+    "base:wood",
+    "base:leaves",
+    "workbench"
   ],
   "items": [
     "primitive_pickaxe",
@@ -9,12 +15,7 @@
     "rock",
     "mushroom.item"
   ],
-  "blocks": [
-    "base:coal_ore",
-    "base:stone",
-    "mushroom",
-    "small_rock",
-    "base:wood",
-    "base:leaves"
+  "entities": [
+    "base:player"
   ]
 }

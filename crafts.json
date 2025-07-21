@@ -1,0 +1,10 @@
+[
+    {
+        "components": [
+            {"id": "base:sand.item", "count": 2}
+        ],
+        "results": [
+            {"id": "base:coal_ore.item", "count": 1}
+        ]
+    }
+]
