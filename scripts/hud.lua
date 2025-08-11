@@ -3,8 +3,11 @@ local survival_hud = require "survival_hud"
 
 local death_ambient
 local isdead = false
+local health_effect
 
 function on_hud_open()
+    health_effect = gfx.posteffects.index("base_survival:health")
+
     events.on("base_survival:gamemodes.set", function(playerid, name)
         if name == "survival" then
             hud.open_permanent("base_survival:health_bar")
@@ -115,10 +118,13 @@ function on_hud_open()
             audio.stop(death_ambient)
             death_ambient = nil
             isdead = false
+            gfx.posteffects.set_intensity(health_effect, 0.0)
         end)
         death_ambient = audio.play_stream_2d(
             "sounds/ambient/death.ogg", 1.0, 0.5, "ambient", true
         )
+        gfx.posteffects.set_effect(health_effect, "death")
+        gfx.posteffects.set_intensity(health_effect, 1.0)
     end)
     events.on("base_survival:player_damage", function(pid, points)
         if pid ~= hud.get_player() then

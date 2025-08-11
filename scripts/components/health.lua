@@ -55,6 +55,9 @@ end
 
 function damage(points)
     local pid = entity:get_player()
+    if gamemodes.get(pid).current == "developer" then
+        return
+    end
     if points > 0 and pid then
         events.emit("base_survival:player_damage", pid, points)
     end

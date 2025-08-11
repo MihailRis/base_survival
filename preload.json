@@ -8,5 +8,8 @@
         "events/damage",
         "events/huge_damage",
         "events/eat"
+    ],
+    "post-effects": [
+        "death"
     ]
 }
