@@ -1,0 +1,4 @@
+"base_survival:plant" = [
+    "base:grass",
+    "base:flower",
+]

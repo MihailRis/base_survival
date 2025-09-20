@@ -4,6 +4,9 @@ local gamemodes = {
 
 function gamemodes.get_player_health(playerid)
     local entity = entities.get(player.get_entity(playerid))
+    if entity == nil then
+        return nil
+    end
     return entity:get_component("base_survival:health")
 end
 

@@ -1,0 +1,3 @@
+<inventory size="400,100">
+    <slots-grid rows="3" count="6" updatefunc="on_items_update"></slots-grid>
+</inventory>

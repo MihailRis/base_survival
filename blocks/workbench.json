@@ -1,0 +1,10 @@
+{
+    "model": "custom",
+    "model-name": "workbench",
+    "size": [2, 1, 1],
+    "hitbox": [0, 0, 0, 2, 1, 1],
+    "rotation": "pane",
+    "material": "base:wood",
+    "ui-layout": "base_survival:workbench",
+    "inventory-size": 6
+}

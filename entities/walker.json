@@ -1,0 +1,14 @@
+{
+    "components": [
+        "core:pathfinding",
+        {
+            "name": "core:mob",
+            "args": {
+                "jump_force": 8.0
+            }
+        },
+        "base_survival:walker"
+    ],
+    "hitbox": [0.6, 1.8, 0.6],
+    "skeleton-name": "base:player"
+}

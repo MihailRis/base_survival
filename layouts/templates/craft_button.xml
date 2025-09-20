@@ -1,0 +1,8 @@
+<container id='craft_slot_%{index}' size='45' color='#00000050' pos='%{x},%{y}' hover-color='100'
+    onclick="DATA:craft(%{index})" enabled='false'>
+    <image src='blocks:transparent' 
+        visible='false'
+        hover-color='400' 
+        size='45'
+    />
+</container>

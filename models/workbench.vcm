@@ -1,0 +1,17 @@
+@box from (0,0.875,0) to (2,1,1) texture "blocks:workbench_top" {
+    @part tags (top, bottom) region-scale (0.5,1)
+    @part tags (south, north) region-scale (0.5,1) texture "blocks:workbench_front"
+    @part tags (east, west) region-scale (1,1) texture "blocks:wood"
+}
+@box from (1,0.5,0.125) to (1.875,0.875,0.875) texture "blocks:planks" delete (top) {
+    @part tags (north) texture "blocks:workbench_shelf" region-scale (1,2)
+}
+
+@box from (0,0,0) to (0.125,0.875,0.125) texture "blocks:wood" delete (top)
+@box from (0,0,0.875) to (0.125,0.875,1) texture "blocks:wood" delete (top)
+
+@box from (0.875,0,0) to (1,0.875,0.125) texture "blocks:wood" delete (top)
+@box from (0.875,0,0.875) to (1,0.875,1) texture "blocks:wood" delete (top)
+
+@box from (1.875,0,0) to (2,0.875,0.125) texture "blocks:wood" delete (top)
+@box from (1.875,0,0.875) to (2,0.875,1) texture "blocks:wood" delete (top)

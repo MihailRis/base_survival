@@ -10,6 +10,10 @@ function get_health()
     return health or 20
 end
 
+function get_max_health()
+    return max_health
+end
+
 function set_health(value)
     health = math.min(math.max(0, value), max_health)
     events.emit("base_survival:health.set", entity, health)
@@ -41,8 +45,19 @@ function die()
     player.set_entity(pid, 0)
 end
 
+function heal(points)
+    local pid = entity:get_player()
+    if points < 1 and pid then
+        events.emit("base_survival:player_heal", pid, points)
+    end
+    set_health(math.min(health + points, max_health))
+end
+
 function damage(points)
     local pid = entity:get_player()
+    if gamemodes.get(pid).current == "developer" then
+        return
+    end
     if points > 0 and pid then
         events.emit("base_survival:player_damage", pid, points)
     end
@@ -58,6 +73,6 @@ function on_save()
 end
 
 function on_grounded(force)
-    local dmg = math.floor((force - 12) * 0.75)
+    local dmg = math.floor((force - 12) * 1.1)
     damage(math.max(0, math.floor(dmg)))
 end
