@@ -5,6 +5,8 @@ local death_ambient
 local isdead = false
 local health_effect
 
+local hit_timer = 0
+
 function on_hud_open()
     health_effect = gfx.posteffects.index("base_survival:health")
 
@@ -54,6 +56,9 @@ function on_hud_open()
         local x = target.x
         local y = target.y
         local z = target.z
+        if hit_timer <= 0.0 then
+            hit_timer = 1.0
+        end
         gfx.blockwraps.set_texture(target.wrapper, string.format(
             "cracks/cracks_%s", math.floor(target.progress * 11)
         ))
@@ -69,6 +74,9 @@ function on_hud_open()
             local cam = cameras.get("core:first-person")
             local front = cam:get_front()
             local ray = block.raycast(cam:get_pos(), front, 64.0)
+            if not ray then
+                return
+            end
             gfx.particles.emit(ray.endpoint, 4, {
                 lifetime=1.0,
                 spawn_interval=0.0001,
@@ -94,8 +102,8 @@ function on_hud_open()
             audio.play_sound(
                 "events/huge_damage",
                 pos[1], pos[2], pos[3],
-                1.0, 
-                0.8 + math.random() * 0.4, 
+                1.0,
+                0.8 + math.random() * 0.4,
                 "regular"
             )
         end
@@ -160,6 +168,29 @@ function on_hud_open()
             inventory.decrement(invid, slot)
         end
     end)
+
+    local prev_hand_controller = hud.hand_controller or hud.default_hand_controller
+    hud.hand_controller = function()
+        if prev_hand_controller then
+            prev_hand_controller()
+        end
+
+        local skeleton = gfx.skeletons
+        local pid = hud.get_player()
+        local invid, slot = player.get_inventory(pid)
+        local itemid = inventory.get(invid, slot)
+
+        local cam = cameras.get("core:first-person")
+        local bone = skeleton.index("hand", "item")
+
+        local matrix = skeleton.get_matrix("hand", bone)
+        if hit_timer > 0.0 then
+            local timer = hit_timer - 0.0
+            matrix = mat4.rotate(matrix, {0, 0, 1}, (timer) * 120)
+            matrix = mat4.translate(matrix, {-timer * 3, timer * 2, 0})
+        end
+        skeleton.set_matrix("hand", bone, matrix)
+    end
 end
 
 function on_hud_render()
@@ -174,6 +205,12 @@ function on_hud_render()
     else
         local x, y, z = player.get_rot(pid)
         local dt = math.min(time.delta() * 12, 1.0)
-        player.set_rot(pid, x, y, z * (1.0 - dt)) 
+        player.set_rot(pid, x, y, z * (1.0 - dt))
+
+        if hit_timer > 0 then
+            hit_timer = hit_timer - time.delta() * 5
+        else
+            hit_timer = 0.0
+        end
     end
 end
